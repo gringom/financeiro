@@ -42,8 +42,8 @@
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">Laravel 5.</div>
-                <div class="sub-title">Here we go</div>
+                <div class="title">Financeiro.</div>
+                <div class="sub-title">Tuva Editora</div>
             </div>
         </div>
     </body>

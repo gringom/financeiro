@@ -62,7 +62,7 @@
                       <ul class="dropdown-menu">
                        <li><a href="{{ url('/categorias') }}"><i class="fa fa-btn fa-plus"></i>Categorias</a></li>
                        <li><a href="{{ url('/contas') }}"><i class="fa fa-btn fa-plus"></i>Contas</a></li>
-                       <li><a href="{{ url('/pessoas') }}"><i class="fa fa-btn fa-plus"></i>Forncedores/Clientes</a></li>
+                       <li><a href="{{ url('/pessoas') }}"><i class="fa fa-btn fa-plus"></i>Fornecedores/Clientes</a></li>
                        <li><a href="{{ url('/projetos') }}"><i class="fa fa-btn fa-plus"></i>Projetos</a></li>
                       </ul>
                     </li>

@@ -27,6 +27,11 @@
         .margin-bottom-20 {
             margin-bottom: 20px;
         }
+
+        .message-box {
+            margin: 5px;
+            padding: 15px;
+        }
     </style>
 
     @yield('head')

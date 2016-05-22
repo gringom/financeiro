@@ -27,6 +27,8 @@ class AccountsController extends Controller
 
 	public function update(Request $request, Account $account)
 	{
+		$this->validateForm($request);
+
 		$account->update($request->all());
 
 		return redirect('/contas');
@@ -34,6 +36,8 @@ class AccountsController extends Controller
 
 	public function store(Request $request)
 	{
+		$this->validateForm($request);
+
 		$account = new Account($request->all());
 		$account->by(Auth::id());
 		$account->save();
@@ -44,5 +48,15 @@ class AccountsController extends Controller
 	{
 		$account->delete();
 		return redirect('/contas');
+	}
+
+	public function validateForm(Request $request)
+	{
+		$this->validate($request, [
+			'title' => 'required|max:15',
+		],[
+			'title.required' => 'O campo nome da conta é obrigatório',
+			'title.max' => 'O campo nome da categoria não pode ter mais que 15 caracteres',
+		]);
 	}
 }

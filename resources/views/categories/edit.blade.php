@@ -14,6 +14,12 @@ Categoria: {{ $category->title }}
 @section('content')
 <div class="row">
 	<div class="col-md-10 col-md-offset-1">
+		@if ( count($errors) )
+			@foreach( $errors->all() as $error )
+				<div class="message-box bg-danger">{{ $error }}</div>
+			@endforeach
+		@endif
+
 		<h1>Categoria: {{ $category->title }}</h1>
 
 		{!! Form::open(array('url' => '/categorias/' . $id)) !!}
@@ -22,7 +28,7 @@ Categoria: {{ $category->title }}
 				{!! Form::text('title', $title, array('class' => 'form-control', 'placeholder' => 'Nome da categoria')) !!}
 			</div>
 			<div class="form-group">
-				{!! Form::select('type', array('entrada' => 'Entrada', 'saida' => 'Saída'), $type, ['placeholder' => 'Selecionar tipo de categoria...', 'class' => 'form-control']) !!}
+				{!! Form::select('type', array('entrada' => 'Entrada', 'saida' => 'Saída'), $type, ['placeholder' => 'Selecionar tipo de categoria...', 'class' => 'form-control', 'required']) !!}
 			</div>
 			<div class="form-group">
 				{!! Form::textarea('description', $description, array('class' => 'form-control', 'placeholder' => 'Descrição livre sobre a categoria')) !!}
@@ -32,7 +38,7 @@ Categoria: {{ $category->title }}
 				<a href="/categorias" class="btn btn-default">Voltar</a>
 				<a href="/categorias/{{ $category->id }}/delete" class="btn btn-danger pull-right margin-bottom-20" onclick="return confirm('Confirma a remoção dessa categoria?');">Remover</a>
 			</div>
-		</form>
+		{!! Form::close() !!}
 	</div>
 </div>
 @stop

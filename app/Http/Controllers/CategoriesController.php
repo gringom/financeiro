@@ -27,6 +27,8 @@ class CategoriesController extends Controller
 
 	public function update(Request $request, Category $category)
 	{
+		$this->validateForm($request);
+
 		$category->update($request->all());
 
 		return redirect('/categorias');
@@ -34,9 +36,12 @@ class CategoriesController extends Controller
 
 	public function store(Request $request)
 	{
+		$this->validateForm($request);
+
 		$category = new Category($request->all());
 		$category->by(Auth::id());
 		$category->save();
+
 		return redirect('/categorias');
 	}
 
@@ -44,5 +49,17 @@ class CategoriesController extends Controller
 	{
 		$category->delete();
 		return redirect('/categorias');
+	}
+
+	public function validateForm(Request $request)
+	{
+		$this->validate($request, [
+			'title' => 'required|max:20',
+			'type' => 'required',
+		],[
+			'title.required' => 'O campo nome da categoria é obrigatório',
+			'title.max' => 'O campo nome da categoria não pode ter mais que 20 caracteres',
+			'type.required' => 'O campo tipo de categoria é obrigatório',
+		]);
 	}
 }

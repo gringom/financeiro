@@ -17,7 +17,6 @@ Categorias
 		<ul class="list-group">
 			@foreach ($categories as $category)
 				<?php
-					//print_r($available_types);
 					$type = $available_types[$category->type] ;
 				?>
 				<li class="list-group-item">

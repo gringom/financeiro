@@ -5,6 +5,26 @@ Route::auth();
 Route::get('/', 'PagesController@home');
 Route::get('/sobre', 'PagesController@about');
 
+// cadastro de projetos
+Route::get('/projetos/criar', function(){
+	return view('projects.new');
+});
+Route::post('/projetos/criar', 'ProjectsController@store');
+Route::get('/projetos', 'ProjectsController@index');
+Route::get('/projetos/{project}', 'ProjectsController@show');
+Route::patch('/projetos/{project}', 'ProjectsController@update');
+Route::get('/projetos/{project}/delete', 'ProjectsController@destroy');
+
+// cadastro de clientes e fornecedores
+Route::get('/clientes_fornecedores/criar', function(){
+	return view('people.new');
+});
+Route::post('/clientes_fornecedores/criar', 'PeopleController@store');
+Route::get('/clientes_fornecedores', 'PeopleController@index');
+Route::get('/clientes_fornecedores/{person}', 'PeopleController@show');
+Route::patch('/clientes_fornecedores/{person}', 'PeopleController@update');
+Route::get('/clientes_fornecedores/{person}/delete', 'PeopleController@destroy');
+
 // cadastro de categorias
 Route::get('/categorias/criar', function(){
 	return view('categories.new');

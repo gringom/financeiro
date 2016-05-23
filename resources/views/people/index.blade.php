@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-Contas
+Clientes e Fornecedores
 @stop
 
 @section('content')
@@ -10,23 +10,23 @@ Contas
 		@if (Session::has('flash_message'))
 			<div class="message-box bg-{{ Session::get('flash_message_level') }}">{{ Session::get('flash_message') }}</div>
 		@endif
-		<h1>Todas as Contas</h1>
+		<h1>Todas os Clientes e Fornecedores</h1>
 
-		<a href="/contas/criar" class="btn btn-primary margin-bottom-20">Novo</a>
+		<a href="/clientes_fornecedores/criar" class="btn btn-primary margin-bottom-20">Novo</a>
 		<ul class="list-group">
-			@foreach ($accounts as $account)
+			@foreach ($people as $person)
 				<li class="list-group-item">
 					<div class="pull-right">
-						<a class="btn" href="/contas/{{ $account->id }}">Editar</a>
+						<a class="btn" href="/clientes_fornecedores/{{ $person->id }}">Editar</a>
 					</div>
-					{{ $account->title }}
+					{{ $person->title }}
 					<span id="helpBlock" class="help-block">
-						{{ $account->description }} 
+						{{ $person->description }} 
 					</span>
 				</li>
 			@endforeach
 		</ul>
-		<a href="/contas/criar" class="btn btn-primary margin-bottom-20">Novo</a>
+		<a href="/clientes_fornecedores/criar" class="btn btn-primary margin-bottom-20">Novo</a>
 	</div>
 </div>
 @stop

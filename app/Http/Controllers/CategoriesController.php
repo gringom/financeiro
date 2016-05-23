@@ -30,6 +30,7 @@ class CategoriesController extends Controller
 		$this->validateForm($request);
 
 		$category->update($request->all());
+		flash('Categoria atualizada.', 'success');
 
 		return redirect('/categorias');
 	}
@@ -41,6 +42,7 @@ class CategoriesController extends Controller
 		$category = new Category($request->all());
 		$category->by(Auth::id());
 		$category->save();
+		flash('Categoria criada.', 'success');
 
 		return redirect('/categorias');
 	}
@@ -48,6 +50,7 @@ class CategoriesController extends Controller
 	public function destroy(Category $category)
 	{
 		$category->delete();
+		flash('Categoria removida.', 'success');
 		return redirect('/categorias');
 	}
 

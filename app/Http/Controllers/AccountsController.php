@@ -30,6 +30,7 @@ class AccountsController extends Controller
 		$this->validateForm($request);
 
 		$account->update($request->all());
+		flash('Conta atualizada.', 'success');
 
 		return redirect('/contas');
 	}
@@ -41,12 +42,16 @@ class AccountsController extends Controller
 		$account = new Account($request->all());
 		$account->by(Auth::id());
 		$account->save();
+		flash('Conta criada.', 'success');
+
 		return redirect('/contas');
 	}
 
 	public function destroy(Account $account)
 	{
 		$account->delete();
+		flash('Conta removida.', 'success');
+
 		return redirect('/contas');
 	}
 

@@ -27,7 +27,7 @@ class AccountsController extends Controller
 
 	public function update(Request $request, Account $account)
 	{
-		$this->validateForm($request);
+		$this->validateForm($request, $account);
 
 		$account->update($request->all());
 		flash('Conta atualizada.', 'success');
@@ -55,12 +55,19 @@ class AccountsController extends Controller
 		return redirect('/contas');
 	}
 
-	public function validateForm(Request $request)
+	public function validateForm(Request $request, $account = null)
 	{
+		$acc_id = null;
+		if( isset( $account->id ) )
+		{
+			$acc_id = $account->id;
+		}
+
 		$this->validate($request, [
-			'title' => 'required|max:15',
+			'title' => 'required|unique:accounts,title,'.$acc_id.'|max:15',
 		],[
 			'title.required' => 'O campo nome da conta é obrigatório',
+			'title.unique' => 'Já tem uma conta cadastrada com o mesmo nome',
 			'title.max' => 'O campo nome da categoria não pode ter mais que 15 caracteres',
 		]);
 	}

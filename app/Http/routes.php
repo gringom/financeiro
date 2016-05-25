@@ -5,6 +5,15 @@ Route::auth();
 Route::get('/', 'PagesController@home');
 Route::get('/sobre', 'PagesController@about');
 
+// cadastro no banco de dados
+Route::get('/bd/criar', 'RecordsController@new_record');
+Route::post('/bd/criar', 'RecordsController@store');
+Route::get('/bd', 'RecordsController@index');
+Route::get('/bd/{record}', 'RecordsController@show');
+Route::patch('/bd/{record}', 'RecordsController@update');
+Route::get('/bd/{record}/delete', 'RecordsController@destroy');
+Route::get('/bd/{record}/duplicar', 'RecordsController@duplicate');
+
 // cadastro de projetos
 Route::get('/projetos/criar', function(){
 	return view('projects.new');

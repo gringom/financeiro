@@ -27,7 +27,7 @@ class PeopleController extends Controller
 
 	public function update(Request $request, Person $person)
 	{
-		$this->validateForm($request);
+		$this->validateForm($request, $person);
 
 		$person->update($request->all());
 		flash('Cliente/Fornecedor atualizado.', 'success');
@@ -53,12 +53,19 @@ class PeopleController extends Controller
 		return redirect('/clientes_fornecedores');
 	}
 
-	public function validateForm(Request $request)
+	public function validateForm(Request $request, $person = null)
 	{
+		$per_id = null;
+		if( isset( $person->id ) )
+		{
+			$per_id = $person->id;
+		}
+
 		$this->validate($request, [
-			'title' => 'required|max:50',
+			'title' => 'required|unique:people,title,'.$per_id.'|max:50',
 		],[
 			'title.required' => 'O campo Nome do Cliente/Fornecedor é obrigatório',
+			'title.unique' => 'Já tem um Cliente/Fornecedor cadastrado com o mesmo nome',
 			'title.max' => 'O campo Nome do Cliente/Fornecedor não pode ter mais que 50 caracteres',
 		]);
 	}

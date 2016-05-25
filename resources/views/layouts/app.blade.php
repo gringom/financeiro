@@ -13,6 +13,8 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
 
     <style>
@@ -28,9 +30,17 @@
             margin-bottom: 20px;
         }
 
+        .margin-right-10 {
+            margin-right: 10px;
+        }
+
         .message-box {
             margin: 5px;
             padding: 15px;
+        }
+
+        th {
+            text-align: center;
         }
     </style>
 
@@ -61,7 +71,7 @@
                 <ul class="nav navbar-nav">
                     <li><a href="{{ url('/fluxo') }}"><i class="fa fa-btn fa-usd"></i>Fluxo de Caixa</a></li>
                     <li><a href="{{ url('/busca') }}"><i class="fa fa-btn fa-filter"></i>Tabela Dinâmica</a></li>
-                    <li><a href="{{ url('/banco_de_dados') }}"><i class="fa fa-btn fa-list"></i>Banco de Dados</a></li>
+                    <li><a href="{{ url('/bd') }}"><i class="fa fa-btn fa-list"></i>Banco de Dados</a></li>
                     <li class="dropdown">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-btn fa-cog"></i>Cadastros <span class="caret"></span></a>
                       <ul class="dropdown-menu">
@@ -101,11 +111,11 @@
         @yield('content')
     </div>
 
-    @yield('footer')
-
     <!-- JavaScripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
+
+    @yield('footer')
 </body>
 </html>

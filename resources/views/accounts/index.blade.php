@@ -7,9 +7,9 @@ Contas
 @section('content')
 <div class="row">
 	<div class="col-md-10 col-md-offset-1">
-		@if (Session::has('flash_message'))
-			<div class="message-box bg-{{ Session::get('flash_message_level') }}">{{ Session::get('flash_message') }}</div>
-		@endif
+
+		@include('layouts.flash')
+
 		<h1>Todas as Contas</h1>
 
 		<a href="/contas/criar" class="btn btn-primary margin-bottom-20">Novo</a>
@@ -17,7 +17,7 @@ Contas
 			@foreach ($accounts as $account)
 				<li class="list-group-item">
 					<div class="pull-right">
-						<a class="btn" href="/contas/{{ $account->id }}">Editar</a>
+						<a class="btn btn-default" href="/contas/{{ $account->id }}">Editar</a>
 					</div>
 					{{ $account->title }}
 					<span id="helpBlock" class="help-block">

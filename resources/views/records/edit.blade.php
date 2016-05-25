@@ -99,4 +99,5 @@ Registro: {{ $records['types'][$type] }} / {{ $records['people'][$person_id] }}
     @include('parts.records_datepicker')
     @include('parts.records_money')
     @include('parts.records_type')
+    @include('parts.records_awesome_select')
 @stop

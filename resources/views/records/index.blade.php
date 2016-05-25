@@ -6,7 +6,7 @@ Banco de Dados
 
 @section('content')
 <div class="row">
-	<div class="col-md-12">
+	<div class="col-lg-12">
 
 		@include('parts.flash')
 

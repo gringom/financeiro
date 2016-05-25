@@ -138,7 +138,7 @@ class RecordsController extends Controller
 
 	public function getAllProjectsAsArray()
 	{
-		$projects_info = Project::all() ;
+		$projects_info = Project::orderBy('year','desc')->get();
     	$projects = array();
     	foreach( $projects_info as $project ){
     		$projects[$project->id] = $project->title . "(" . $project->year . ")";

@@ -56,7 +56,7 @@ Registro: {{ $records['types'][$type] }} / {{ $records['people'][$person_id] }}
 			</div>
 			<div class="form-group">
 				{{ Form::label('category_id', 'Categoria') }}
-				{!! Form::select('category_id', $categories, $category_id, ['placeholder' => 'Selecionar Categorias...', 'class' => 'form-control', 'id' => 'category_select']) !!}
+				{!! Form::select('category_id', $categories, $category_id, ['placeholder' => 'Selecionar Categorias...', 'class' => 'form-control', 'id' => 'category_id']) !!}
 			</div>
 			<div class="form-group">
 				{{ Form::label('person_id', 'Cliente/Fornecedor') }}

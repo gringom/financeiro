@@ -12,7 +12,7 @@ Categorias
 <div class="row">
 	<div class="col-md-10 col-md-offset-1">
 
-		@include('layouts.flash')
+		@include('parts.flash')
 
 		<h1>Todas as Categorias</h1>
 

@@ -14,11 +14,8 @@ Categoria: {{ $category->title }}
 @section('content')
 <div class="row">
 	<div class="col-md-10 col-md-offset-1">
-		@if ( count($errors) )
-			@foreach( $errors->all() as $error )
-				<div class="message-box bg-danger">{{ $error }}</div>
-			@endforeach
-		@endif
+
+		@include('parts.errors')
 
 		<h1>Categoria: {{ $category->title }}</h1>
 

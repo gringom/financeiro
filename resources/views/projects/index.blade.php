@@ -19,7 +19,7 @@ Projetos
 					<div class="pull-right">
 						<a class="btn btn-default" href="/projetos/{{ $project->id }}">Editar</a>
 					</div>
-					{{ $project->title }} ({{ $project->year }})
+					({{ $project->id }}). {{ $project->title }} ({{ $project->year }})
 					<span id="helpBlock" class="help-block">
 						{{ $project->description }} 
 					</span>

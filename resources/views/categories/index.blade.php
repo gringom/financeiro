@@ -26,7 +26,7 @@ Categorias
 					<div class="pull-right">
 						<a class="btn btn-default" href="/categorias/{{ $category->id }}">Editar</a>
 					</div>
-					{{ $category->title }} ({{ $type }})
+					({{ $category->id }}). {{ $category->title }} ({{ $type }})
 					<span id="helpBlock" class="help-block">
 						{{ $category->description }} 
 					</span>

@@ -19,7 +19,7 @@ Contas
 					<div class="pull-right">
 						<a class="btn btn-default" href="/contas/{{ $account->id }}">Editar</a>
 					</div>
-					{{ $account->title }}
+					({{ $account->id }}). {{ $account->title }}
 					<span id="helpBlock" class="help-block">
 						{{ $account->description }} 
 					</span>

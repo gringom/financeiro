@@ -10,7 +10,7 @@ Clientes e Fornecedores
 
 		@include('parts.flash')
 
-		<h1>Todas os Clientes e Fornecedores</h1>
+		<h1>Todos os Clientes e Fornecedores</h1>
 
 		<a href="/clientes_fornecedores/criar" class="btn btn-primary margin-bottom-20">Novo</a>
 		<ul class="list-group">
@@ -19,7 +19,7 @@ Clientes e Fornecedores
 					<div class="pull-right">
 						<a class="btn btn-default" href="/clientes_fornecedores/{{ $person->id }}">Editar</a>
 					</div>
-					{{ $person->title }}
+					({{ $person->id }}). {{ $person->title }}
 					<span id="helpBlock" class="help-block">
 						{{ $person->description }} 
 					</span>

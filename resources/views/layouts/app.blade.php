@@ -39,9 +39,6 @@
             padding: 15px;
         }
 
-        th {
-            text-align: center;
-        }
     </style>
 
     @yield('head')

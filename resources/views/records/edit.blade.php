@@ -18,8 +18,8 @@
 	$person_id = isset( $record->person_id ) ? $record->person_id : old('person_id');
 	$project_id = isset( $record->project_id ) ? $record->project_id : old('project_id');
 	$value = isset( $record->value ) ? $record->value : old('value');
-	$payment_date = isset( $records['payment_date'] ) ? $records['payment_date']->format('d/m/Y') : old('payment_date');
-	$paid_date = strlen( $records['paid_date'] ) > 0 ? $records['paid_date']->format('d/m/Y') : old('paid_date');
+	$payment_date = is_object( $records['payment_date'] ) ? $records['payment_date']->format('d/m/Y') : old('payment_date');
+	$paid_date = is_object( $records['paid_date'] ) ? $records['paid_date']->format('d/m/Y') : old('paid_date');
 	$description = isset( $record->description ) ? $record->description : old('description');
 ?>
 

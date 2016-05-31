@@ -8,6 +8,7 @@ use App\Account;
 use App\Category;
 use App\Person;
 use App\Project;
+use DateTime;
 use Illuminate\Http\Request;
 
 class RecordsController extends Controller
@@ -37,6 +38,8 @@ class RecordsController extends Controller
 	{
 		$records = $this->getAllAsArray();
 		$records['this'] = $record ;
+		$records['payment_date'] = DateTime::createFromFormat('Y-m-d', $record->payment_date);
+		$records['paid_date'] = DateTime::createFromFormat('Y-m-d', $record->paid_date);
 
 		return view('records.edit', compact('records'));
 	}
@@ -44,6 +47,11 @@ class RecordsController extends Controller
 	public function update(Request $request, Record $record)
 	{
 		$this->validateForm($request);
+
+		$payment_date = DateTime::createFromFormat('d/m/Y', $request->get('payment_date'));
+		$paid_date = DateTime::createFromFormat('d/m/Y', $request->get('paid_date'));
+		$request['payment_date'] = $payment_date->format('Y-m-d');
+		$request['paid_date'] = $paid_date->format('Y-m-d');
 
 		$record->update($request->all());
 		flash('Registro atualizado.', 'success');
@@ -55,7 +63,13 @@ class RecordsController extends Controller
 	{
 		$this->validateForm($request);
 
+		$payment_date = DateTime::createFromFormat('d/m/Y', $request->get('payment_date'));
+		$paid_date = DateTime::createFromFormat('d/m/Y', $request->get('paid_date'));
+		$request['payment_date'] = $payment_date->format('Y-m-d');
+		$request['paid_date'] = $paid_date->format('Y-m-d');
+
 		$record = new Record($request->all());
+
 		$record->by(Auth::id());
 		$record->save();
 		flash('Registro criado.', 'success');

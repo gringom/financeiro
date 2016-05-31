@@ -39,6 +39,14 @@
             padding: 15px;
         }
 
+        .danger-text {
+            color: #CC4400;
+        }
+
+        .primary-text {
+            color: #4C7CF0;
+        }
+
     </style>
 
     @yield('head')

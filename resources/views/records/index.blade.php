@@ -62,6 +62,43 @@ Banco de Dados
 						</td>
 					</tr>
 				@endforeach
+					<tfoot>
+						<tr>
+							<th colspan="5">Somatória (A Receber)</th>
+							<th class="primary-text">R$ {{ number_format( $records['sum_values']['a_receber'], 2, ",", "." ) }}</th>
+							<th colspan="4"></th>
+						</tr>
+						<tr>
+							<th colspan="5">Somatória (A Pagar)</th>
+							<th class="danger-text">R$ {{ number_format( $records['sum_values']['a_pagar'], 2, ",", "." ) }}</th>
+							<th colspan="4"></th>
+						</tr>
+						<tr>
+							<th colspan="5">Somatória (Entrada)</th>
+							<th class="primary-text">R$ {{ number_format( $records['sum_values']['entrada'], 2, ",", "." ) }}</th>
+							<th colspan="4"></th>
+						</tr>
+						<tr>
+							<th colspan="5">Somatória (Saída)</th>
+							<th class="danger-text">R$ {{ number_format( $records['sum_values']['saida'], 2, ",", "." ) }}</th>
+							<th colspan="4"></th>
+						</tr>
+						<tr>
+							<th colspan="5">Somatória (Entrada + A Receber)</th>
+							<th class="primary-text">R$ {{ number_format( $records['sum_values']['entradas'], 2, ",", "." ) }}</th>
+							<th colspan="4"></th>
+						</tr>
+						<tr>
+							<th colspan="5">Somatória (Saída + A Pagar)</th>
+							<th class="danger-text">R$ {{ number_format( $records['sum_values']['saidas'], 2, ",", "." ) }}</th>
+							<th colspan="4"></th>
+						</tr>
+						<tr>
+							<th colspan="5">Resultado Final (Entradas - Saídas)</th>
+							<th class="<? echo $records['sum_values']['resultado_final'] > 0 ? 'primary-text' : 'danger-text' ?>">R$ {{ number_format( $records['sum_values']['resultado_final'], 2, ",", "." ) }}</th>
+							<th colspan="4"></th>
+						</tr>
+					</tfoot>
 			</table>
 		</div>
 		<a href="/bd/criar" class="btn btn-primary margin-bottom-20">Novo</a>

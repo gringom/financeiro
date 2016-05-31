@@ -22,6 +22,7 @@ class RecordsController extends Controller
     	$rec = Record::orderBy('created_at', 'desc')->get();
     	$records['all'] = $rec->load('account','category','person','project');
     	$records['types'] = array('entrada' => 'Entrada', 'saida' => 'Saída', 'a_receber' => 'A Receber', 'a_pagar' => 'A Pagar');
+    	$records['sum_values'] = $this->getValuesSum();
 
     	return view('records.index', compact('records'));
     }
@@ -157,5 +158,19 @@ class RecordsController extends Controller
     	$records['projects'] = $this->getAllProjectsAsArray();
 
     	return $records;
+	}
+
+	public function getValuesSum()
+	{
+		$sum = array();
+		$sum['entrada'] = Record::where('type','entrada')->sum('value');
+		$sum['saida'] = Record::where('type','saida')->sum('value');
+		$sum['a_receber'] = Record::where('type','a_receber')->sum('value');
+		$sum['a_pagar'] = Record::where('type','a_pagar')->sum('value');
+		$sum['entradas'] = $sum['entrada'] + $sum['a_receber'] ;
+		$sum['saidas'] = $sum['saida'] + $sum['a_pagar'] ;
+		$sum['resultado_final'] = $sum['entradas'] - $sum['saidas'];
+
+		return $sum;
 	}
 }

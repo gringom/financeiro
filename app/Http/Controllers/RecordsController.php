@@ -49,9 +49,11 @@ class RecordsController extends Controller
 		$this->validateForm($request);
 
 		$payment_date = DateTime::createFromFormat('d/m/Y', $request->get('payment_date'));
-		$paid_date = DateTime::createFromFormat('d/m/Y', $request->get('paid_date'));
 		$request['payment_date'] = $payment_date->format('Y-m-d');
-		$request['paid_date'] = $paid_date->format('Y-m-d');
+		if( strlen($request->get('paid_date')) > 0 ){
+			$paid_date = DateTime::createFromFormat('d/m/Y', $request->get('paid_date'));
+			$request['paid_date'] = $paid_date->format('Y-m-d');			
+		}
 
 		$record->update($request->all());
 		flash('Registro atualizado.', 'success');
@@ -64,9 +66,11 @@ class RecordsController extends Controller
 		$this->validateForm($request);
 
 		$payment_date = DateTime::createFromFormat('d/m/Y', $request->get('payment_date'));
-		$paid_date = DateTime::createFromFormat('d/m/Y', $request->get('paid_date'));
 		$request['payment_date'] = $payment_date->format('Y-m-d');
-		$request['paid_date'] = $paid_date->format('Y-m-d');
+		if( strlen($request->get('paid_date')) > 0 ){
+			$paid_date = DateTime::createFromFormat('d/m/Y', $request->get('paid_date'));
+			$request['paid_date'] = $paid_date->format('Y-m-d');			
+		}
 
 		$record = new Record($request->all());
 

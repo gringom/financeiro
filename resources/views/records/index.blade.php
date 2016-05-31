@@ -30,7 +30,7 @@ Banco de Dados
 				@foreach ($records['all'] as $record)
 					<?php
 					$payment_date = DateTime::createFromFormat('Y-m-d', $record->payment_date);
-					$paid_date = DateTime::createFromFormat('Y-m-d', $record->paid_date);
+					$paid_date = isset( $record->paid_date ) ? DateTime::createFromFormat('Y-m-d', $record->paid_date) : "";
 					?>
 					@if( $record->type == 'a_receber' )
 					<tr class="success">
@@ -50,7 +50,7 @@ Banco de Dados
 						@endif
 						<td>R${{ number_format( $record->value, 2, ",", "." ) }}</td>
 						<td>{{ $payment_date->format('d/m/Y') }}</td>
-						@if( ! empty($paid_date->format('d/m/Y')) )
+						@if( ! empty($paid_date) )
 						<td>{{ $paid_date->format('d/m/Y') }}</td>
 						@else
 						<td>-</td>

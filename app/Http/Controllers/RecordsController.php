@@ -50,9 +50,13 @@ class RecordsController extends Controller
 
 		$payment_date = DateTime::createFromFormat('d/m/Y', $request->get('payment_date'));
 		$request['payment_date'] = $payment_date->format('Y-m-d');
+
 		if( strlen($request->get('paid_date')) > 0 ){
 			$paid_date = DateTime::createFromFormat('d/m/Y', $request->get('paid_date'));
 			$request['paid_date'] = $paid_date->format('Y-m-d');			
+		}
+		else{
+			$request['paid_date'] = false;
 		}
 
 		$record->update($request->all());
@@ -70,6 +74,9 @@ class RecordsController extends Controller
 		if( strlen($request->get('paid_date')) > 0 ){
 			$paid_date = DateTime::createFromFormat('d/m/Y', $request->get('paid_date'));
 			$request['paid_date'] = $paid_date->format('Y-m-d');			
+		}
+		else{
+			$request['paid_date'] = false;
 		}
 
 		$record = new Record($request->all());

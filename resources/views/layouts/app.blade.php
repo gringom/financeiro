@@ -47,6 +47,8 @@
             color: #4C7CF0;
         }
 
+        .container{ width: 100% !important; }
+
     </style>
 
     @yield('head')

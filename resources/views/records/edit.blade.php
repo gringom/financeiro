@@ -1,27 +1,27 @@
-@extends('layouts.app')
-
 <?php
-	$record = $records['this'];
+$record = $records['this'];
 
-	$id = $record->id;
-	$type = isset( $record->type ) ? $record->type : old('type');
-	$main_type = $record->type ;
-	if( $record->type == "a_pagar" ){
-		$main_type = "saida";
-	}
-	elseif ( $record->type == "a_receber" ) {
-		$main_type = "entrada";
-	}
-	$account_id = isset( $record->account_id ) ? $record->account_id : old('account_id');
-	$category_id = isset( $record->category_id ) ? $record->category_id : old('category_id');
-	$categories = $records['categories'][$main_type] ;
-	$person_id = isset( $record->person_id ) ? $record->person_id : old('person_id');
-	$project_id = isset( $record->project_id ) ? $record->project_id : old('project_id');
-	$value = isset( $record->value ) ? $record->value : old('value');
-	$payment_date = is_object( $records['payment_date'] ) ? $records['payment_date']->format('d/m/Y') : old('payment_date');
-	$paid_date = is_object( $records['paid_date'] ) ? $records['paid_date']->format('d/m/Y') : old('paid_date');
-	$description = isset( $record->description ) ? $record->description : old('description');
+$id = $record->id;
+$type = isset( $record->type ) ? $record->type : old('type');
+$main_type = $record->type ;
+if( $record->type == "a_pagar" ){
+	$main_type = "saida";
+}
+elseif ( $record->type == "a_receber" ) {
+	$main_type = "entrada";
+}
+$account_id = isset( $record->account_id ) ? $record->account_id : old('account_id');
+$category_id = isset( $record->category_id ) ? $record->category_id : old('category_id');
+$categories = $records['categories'][$main_type] ;
+$person_id = isset( $record->person_id ) ? $record->person_id : old('person_id');
+$project_id = isset( $record->project_id ) ? $record->project_id : old('project_id');
+$value = isset( $record->value ) ? $record->value : old('value');
+$payment_date = is_object( $records['payment_date'] ) ? $records['payment_date']->format('d/m/Y') : old('payment_date');
+$paid_date = is_object( $records['paid_date'] ) ? $records['paid_date']->format('d/m/Y') : old('paid_date');
+$description = isset( $record->description ) ? $record->description : old('description');
 ?>
+
+@extends('layouts.app')
 
 @section('title')
 Registro: {{ $records['types'][$type] }} / {{ $records['people'][$person_id] }}

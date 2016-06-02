@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use Auth;
 use App\Record;
 use App\Account;
@@ -18,12 +19,36 @@ class RecordsController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-    	$rec = Record::orderBy('created_at', 'desc')->get();
-    	$records['all'] = $rec->load('account','category','person','project');
+    	$records = $this->getAllAsArray();
+    	$records['form_request'] = $request->all();
+    	if( $request->exists('s') ) {
+    		$rec = Record::query();
+
+			if( $request->value && preg_match('/((?:\d{1,3}[,\.]?)+\d*)\,((?:\d{1,3}[,\.]?)+\d*)/', $request->value, $matches) ){
+				$rec->whereBetween('value', array($matches[1], $matches[2]));
+				$records['form_request']['min_selected_value'] = $matches[1];
+				$records['form_request']['max_selected_value'] = $matches[2];
+			}
+
+			list( $rec, $records ) = $this->queryExpiryDate($request, $rec, $records);
+			list( $rec, $records ) = $this->queryPaidDate($request, $rec, $records);
+
+    		$request->type ? $rec->where('type', $request->type) : null;
+    		$request->account ? $rec->where('account_id', $request->account) : null;
+    		$request->category ? $rec->where('category_id', $request->category) : null;
+    		$request->person ? $rec->where('person_id', $request->person) : null;
+    		$request->project ? $rec->where('project_id', $request->project) : null;
+    		$records['all'] = $rec->orderBy('created_at', 'desc')->get();
+    	}
+    	else {
+    		$rec = Record::orderBy('created_at', 'desc')->get();
+    		$records['all'] = $rec->load('account','category','person','project');
+    	}
+
     	$records['types'] = array('entrada' => 'Entrada', 'saida' => 'Saída', 'a_receber' => 'A Receber', 'a_pagar' => 'A Pagar');
-    	$records['sum_values'] = $this->getValuesSum();
+    	$records = $this->getValueLimits($records);
 
     	return view('records.index', compact('records'));
     }
@@ -47,17 +72,7 @@ class RecordsController extends Controller
 	public function update(Request $request, Record $record)
 	{
 		$this->validateForm($request);
-
-		$payment_date = DateTime::createFromFormat('d/m/Y', $request->get('payment_date'));
-		$request['payment_date'] = $payment_date->format('Y-m-d');
-
-		if( strlen($request->get('paid_date')) > 0 ){
-			$paid_date = DateTime::createFromFormat('d/m/Y', $request->get('paid_date'));
-			$request['paid_date'] = $paid_date->format('Y-m-d');			
-		}
-		else{
-			$request['paid_date'] = false;
-		}
+		$request = $this->validateDates($request);
 
 		$record->update($request->all());
 		flash('Registro atualizado.', 'success');
@@ -68,16 +83,7 @@ class RecordsController extends Controller
 	public function store(Request $request)
 	{
 		$this->validateForm($request);
-
-		$payment_date = DateTime::createFromFormat('d/m/Y', $request->get('payment_date'));
-		$request['payment_date'] = $payment_date->format('Y-m-d');
-		if( strlen($request->get('paid_date')) > 0 ){
-			$paid_date = DateTime::createFromFormat('d/m/Y', $request->get('paid_date'));
-			$request['paid_date'] = $paid_date->format('Y-m-d');			
-		}
-		else{
-			$request['paid_date'] = false;
-		}
+		$request = $this->validateDates($request);
 
 		$record = new Record($request->all());
 
@@ -127,6 +133,20 @@ class RecordsController extends Controller
 			'payment_date.date_format' => 'É necessário informar a Data do Vencimento no formato dd/mm/aaaa (ex: 02/09/2016)',
 			'paid_date.date_format' => 'É necessário informar a Data do Pagamento no formato dd/mm/aaaa (ex: 02/09/2016)',
 		]);
+	}
+
+	public function validateDates(Request $request)
+	{
+		$payment_date = DateTime::createFromFormat('d/m/Y', $request->get('payment_date'));
+		$request['payment_date'] = $payment_date->format('Y-m-d');
+
+		if( strlen($request->get('paid_date')) > 0 ){
+			$paid_date = DateTime::createFromFormat('d/m/Y', $request->get('paid_date'));
+			$request['paid_date'] = $paid_date->format('Y-m-d');			
+		}
+		else{
+			$request['paid_date'] = false;
+		}
 	}
 
 	public function getAllAccountsAsArray()
@@ -185,17 +205,39 @@ class RecordsController extends Controller
     	return $records;
 	}
 
-	public function getValuesSum()
+	public function getValueLimits($records)
 	{
-		$sum = array();
-		$sum['entrada'] = Record::where('type','entrada')->sum('value');
-		$sum['saida'] = Record::where('type','saida')->sum('value');
-		$sum['a_receber'] = Record::where('type','a_receber')->sum('value');
-		$sum['a_pagar'] = Record::where('type','a_pagar')->sum('value');
-		$sum['entradas'] = $sum['entrada'] + $sum['a_receber'] ;
-		$sum['saidas'] = $sum['saida'] + $sum['a_pagar'] ;
-		$sum['resultado_final'] = $sum['entradas'] - $sum['saidas'];
+    	$records['form_request']['min_value_limit'] = floor(DB::table('records')->min('value'));
+    	$records['form_request']['max_value_limit'] = ceil(DB::table('records')->max('value'));
+		
+		return $records;
+	}
 
-		return $sum;
+	public function queryExpiryDate(Request $request, $rec, $records)
+	{
+		if( $request->data_venc ){
+			preg_match('/(?P<date_venc_start>\d{2}\/\d{2}\/\d{4}) - (?P<date_venc_end>\d{2}\/\d{2}\/\d{4})/', $request->data_venc, $matches);
+			$start = DateTime::createFromFormat( "d/m/Y", $matches['date_venc_start'] );
+			$end = DateTime::createFromFormat( "d/m/Y", $matches['date_venc_end'] );
+			$rec->whereBetween('payment_date', array($start->format("Y-m-d"), $end->format("Y-m-d")));
+			$records['form_request']['exp_date'] = $matches['date_venc_start'] . " - " . $matches['date_venc_end'];
+			$records['form_request']['exp_date_start'] = $matches['date_venc_start'];
+			$records['form_request']['exp_date_end'] = $matches['date_venc_end'];
+		}
+		return array( $rec, $records );
+	}
+
+	public function queryPaidDate(Request $request, $rec, $records)
+	{
+		if( $request->data_pag ){
+			preg_match('/(?P<date_paid_start>\d{2}\/\d{2}\/\d{4}) - (?P<date_paid_end>\d{2}\/\d{2}\/\d{4})/', $request->data_pag, $matches);
+			$start = DateTime::createFromFormat( "d/m/Y", $matches['date_paid_start'] );
+			$end = DateTime::createFromFormat( "d/m/Y", $matches['date_paid_end'] );
+			$rec->whereBetween('paid_date', array($start->format("Y-m-d"), $end->format("Y-m-d")));
+			$records['form_request']['paid_date'] = $matches['date_paid_start'] . " - " . $matches['date_paid_end'];
+			$records['form_request']['paid_date_start'] = $matches['date_paid_start'];
+			$records['form_request']['paid_date_end'] = $matches['date_paid_end'];
+		}
+		return array( $rec, $records );
 	}
 }

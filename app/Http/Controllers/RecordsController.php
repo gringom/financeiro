@@ -72,6 +72,7 @@ class RecordsController extends Controller
 	public function update(Request $request, Record $record)
 	{
 		$this->validateForm($request);
+
 		$request = $this->validateDates($request);
 
 		$record->update($request->all());
@@ -147,6 +148,7 @@ class RecordsController extends Controller
 		else{
 			$request['paid_date'] = false;
 		}
+		return $request;
 	}
 
 	public function getAllAccountsAsArray()

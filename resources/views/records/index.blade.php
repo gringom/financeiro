@@ -76,8 +76,10 @@ Banco de Dados
 							$sum_a_pagar += $record->value;
 							break;
 					}
+
 					$payment_date = DateTime::createFromFormat('Y-m-d', $record->payment_date);
 					$paid_date = isset( $record->paid_date ) ? DateTime::createFromFormat('Y-m-d', $record->paid_date) : "";
+
 					?>
 					@if( $record->type == 'a_receber' )
 					<tr class="success">

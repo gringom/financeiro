@@ -35,11 +35,11 @@ class RecordsController extends Controller
 			list( $rec, $records ) = $this->queryExpiryDate($request, $rec, $records);
 			list( $rec, $records ) = $this->queryPaidDate($request, $rec, $records);
 
-    		$request->type ? $rec->where('type', $request->type) : null;
-    		$request->account ? $rec->where('account_id', $request->account) : null;
-    		$request->category ? $rec->where('category_id', $request->category) : null;
-    		$request->person ? $rec->where('person_id', $request->person) : null;
-    		$request->project ? $rec->where('project_id', $request->project) : null;
+			$request->type ? $rec->whereIn('type', $request->type) : null;
+    		$request->account ? $rec->whereIn('account_id', $request->account) : null;
+    		$request->category ? $rec->whereIn('category_id', $request->category) : null;
+    		$request->person ? $rec->whereIn('person_id', $request->person) : null;
+    		$request->project ? $rec->whereIn('project_id', $request->project) : null;
     		$records['all'] = $rec->orderBy('created_at', 'desc')->get();
     	}
     	else {

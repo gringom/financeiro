@@ -44,11 +44,11 @@ Banco de Dados
 			<table class="table table-striped table-hover">
 					<thead>
 						<tr style="height: 60px;">
-							<th>{!! Form::select('type', $records['types'], $type, ['placeholder' => 'Tipo...', 'class' => 'form-control', 'id' => 'type']) !!}</th>
-							<th>{!! Form::select('account', $records['accounts'], $account, ['placeholder' => 'Conta...', 'class' => 'form-control', 'id' => 'account']) !!}</th>
-							<th>{!! Form::select('category', $records['categories'], $category, ['placeholder' => 'Categoria...', 'class' => 'form-control', 'id' => 'category']) !!}</th>
-							<th>{!! Form::select('person', $records['people'], $person, ['placeholder' => 'Cliente/Fornecedor...', 'class' => 'form-control', 'id' => 'person']) !!}</th>
-							<th>{!! Form::select('project', $records['projects'], $project, ['placeholder' => 'Projeto...', 'class' => 'form-control', 'id' => 'project']) !!}</th>
+							<th>{!! Form::label('type', 'Tipo'); !!}{!! Form::select('type[]', $records['types'], $type, ['multiple' => true, 'class' => 'form-control', 'id' => 'type']) !!}</th>
+							<th>{!! Form::label('account', 'Conta'); !!}{!! Form::select('account[]', $records['accounts'], $account, ['multiple' => true, 'class' => 'form-control', 'id' => 'account']) !!}</th>
+							<th>{!! Form::label('category', 'Categoria'); !!}{!! Form::select('category[]', array( 'Entrada' => $records['categories']['entrada'], 'Saída' => $records['categories']['saida']), $category, ['multiple' => true, 'class' => 'form-control', 'id' => 'category']) !!}</th>
+							<th>{!! Form::label('person', 'Cliente/Fornecedor'); !!}{!! Form::select('person[]', $records['people'], $person, ['multiple' => true, 'class' => 'form-control', 'id' => 'person']) !!}</th>
+							<th>{!! Form::label('project', 'Projetos'); !!}{!! Form::select('project[]', $records['projects'], $project, ['multiple' => true, 'class' => 'form-control', 'id' => 'project']) !!}</th>
 							<th>{!! Form::label('value', 'Valor'); !!}<input id="value_range" name="value" type="text" class="form-control span2" value="" data-slider-min="<?=$min_value_limit?>" data-slider-max="<?=$max_value_limit?>" data-slider-step="50" data-slider-value="[<?=$min_selected_value?>,<?=$max_selected_value?>]"/>
 							</th>
 							<th>{!! Form::input('text', 'data_venc', $exp_date, ['placeholder' => 'Data do Venc.', 'id' => 'data_venc', 'class' => 'form-control datepicker', 'style' => 'border:0;', 'readonly']) !!}</th>
@@ -150,6 +150,13 @@ Banco de Dados
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/7.1.0/bootstrap-slider.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/df-number-format/2.1.6/jquery.number.min.js"></script>
 
+<script type="text/javascript">
+	$('#type').select2();
+	$('#account').select2();
+	$('#category').select2();
+	$('#person').select2();
+	$('#project').select2();
+</script>
 @include('parts.filters_value_range')
 @include('parts.filters_datepicker')
 @stop

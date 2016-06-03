@@ -105,7 +105,7 @@ Banco de Dados
 						<td>-</td>
 						@endif
 						@if( ! empty($record->description) )
-						<td style="max-width: 180px;">{{ $record->description }}</td>
+						<td style="max-width: 150px;">{{ $record->description }}</td>
 						@else
 						<td>-</td>
 						@endif						

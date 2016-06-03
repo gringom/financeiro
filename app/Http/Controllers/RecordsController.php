@@ -120,7 +120,7 @@ class RecordsController extends Controller
 			'account_id' => 'required',
 			'category_id' => 'required',
 			'person_id' => 'required',
-			'value' => 'required|numeric',
+			'value' => 'numeric',
 			'payment_date' => 'required|date_format:"d/m/Y"',
 			'paid_date' => 'date_format:"d/m/Y"',
 		],[

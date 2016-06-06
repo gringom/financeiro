@@ -6,18 +6,6 @@ Página Principal
 
 @section('head')
 <style>
-    html, body {
-        height: 100%;
-    }
-
-    body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        font-weight: 100;
-        font-family: 'Lato';
-    }
-
     .content {
         width: 100%;
     	margin-top: 50px;

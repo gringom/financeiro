@@ -33,7 +33,8 @@ Painel Geral
 				<table class="table">
 					<tr style="height: 60px;">
 						<td>
-							{!! Form::input('text', 'date_venc', $select_date, ['placeholder' => 'Data de Venc.', 'id' => 'datepick', 'class' => 'form-control datepicker', 'style' => 'border:0;', 'readonly']) !!}
+							{{ Form::label('date_venc', 'Data de Venc.') }}
+							{!! Form::input('text', 'date_venc', $select_date, ['id' => 'datepick', 'class' => 'form-control datepicker', 'style' => 'border:0;', 'readonly']) !!}
 						</td>
 						<td>
 							{{ Form::label('type', 'Tipo') }}

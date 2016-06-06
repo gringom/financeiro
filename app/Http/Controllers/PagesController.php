@@ -35,10 +35,10 @@ class PagesController extends Controller
 
 // \DB::enableQueryLog();
 		$rec = Record::query();
-		$rec->selectRaw('accounts.title as tit, records.type as typ, sum(records.value) as val');
+		$rec->selectRaw('accounts.title as tit, records.type as type, sum(records.value) as val');
 		$rec->leftJoin('accounts', 'records.account_id', '=', 'accounts.id');
 		list( $rec, $records ) = $this->queryExpiryDate($request, $rec, $records);
-		$request->type ? $rec->whereIn('typ', $request->type) : null;
+		$request->type ? $rec->whereIn('type', $request->type) : null;
 		$request->categories_id ? $rec->whereIn('records.category_id', $request->categories_id) : null;
 		$request->people_id ? $rec->whereIn('records.person_id', $request->people_id) : null;
 		$request->project_id ? $rec->whereIn('records.project_id', $request->project_id) : null;
@@ -119,7 +119,7 @@ class PagesController extends Controller
 		}
 
 		foreach ($rec as $r) {
-			$fill_arr[$r->typ][$r->tit] = $r->val;
+			$fill_arr[$r->type][$r->tit] = $r->val;
 		}
 
 		return $fill_arr;

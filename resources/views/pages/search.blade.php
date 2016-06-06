@@ -101,8 +101,17 @@ Painel Geral
 						$to_pay = isset( $col['a_pagar'] ) ? $col['a_pagar'] : 0;
 						$sum = ($entrance + $to_rec) - ($exit + $to_pay);
 						$total_sum += $sum;
+						if( $sum >= 0 && $sum <= 10000 ){
+							$class = "warning";
+						}
+						else if ( $sum > 10000 ){
+							$class = "info";
+						}
+						else {
+							$class = "danger";
+						}
 						?>
-						<td class="<?= $sum >= 0 ? 'info' : 'danger';?>"><strong>R$ {!! number_format( $sum, 2, ",", "." ) !!}</strong></td>
+						<td class="<?=$class;?>"><strong>R$ {!! number_format( $sum, 2, ",", "." ) !!}</strong></td>
 						@endforeach
 						<td class="info"><strong>R$ {!! number_format( $total_sum, 2, ",", "." ) !!}</strong></td>
 					</tr>

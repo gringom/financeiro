@@ -77,7 +77,7 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
                     <li><a href="{{ url('/fluxo') }}"><i class="fa fa-btn fa-usd"></i>Fluxo de Caixa</a></li>
-                    <li><a href="{{ url('/busca') }}"><i class="fa fa-btn fa-filter"></i>Tabela Dinâmica</a></li>
+                    <li><a href="{{ url('/busca') }}"><i class="fa fa-btn fa-filter"></i>Painel Geral</a></li>
                     <li><a href="{{ url('/bd') }}"><i class="fa fa-btn fa-list"></i>Banco de Dados</a></li>
                     <li class="dropdown">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-btn fa-cog"></i>Cadastros <span class="caret"></span></a>

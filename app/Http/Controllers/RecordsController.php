@@ -26,12 +26,7 @@ class RecordsController extends Controller
     	if( $request->exists('s') ) {
     		$rec = Record::query();
 
-			if( $request->value && preg_match('/((?:\d{1,3}[,\.]?)+\d*)\,((?:\d{1,3}[,\.]?)+\d*)/', $request->value, $matches) ){
-				$rec->whereBetween('value', array($matches[1], $matches[2]));
-				$records['form_request']['min_selected_value'] = $matches[1];
-				$records['form_request']['max_selected_value'] = $matches[2];
-			}
-
+			list( $rec, $records ) = $this->queryValue($request, $rec, $records);
 			list( $rec, $records ) = $this->queryExpiryDate($request, $rec, $records);
 			list( $rec, $records ) = $this->queryPaidDate($request, $rec, $records);
 
@@ -239,6 +234,16 @@ class RecordsController extends Controller
 			$records['form_request']['paid_date'] = $matches['date_paid_start'] . " - " . $matches['date_paid_end'];
 			$records['form_request']['paid_date_start'] = $matches['date_paid_start'];
 			$records['form_request']['paid_date_end'] = $matches['date_paid_end'];
+		}
+		return array( $rec, $records );
+	}
+
+	public function queryValue(Request $request, $rec, $records)
+	{
+		if( $request->value && preg_match('/((?:\d{1,3}[,\.]?)+\d*)\,((?:\d{1,3}[,\.]?)+\d*)/', $request->value, $matches) ){
+			$rec->whereBetween('value', array($matches[1], $matches[2]));
+			$records['form_request']['min_selected_value'] = $matches[1];
+			$records['form_request']['max_selected_value'] = $matches[2];
 		}
 		return array( $rec, $records );
 	}

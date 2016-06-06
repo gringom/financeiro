@@ -9,6 +9,7 @@ use App\Person;
 use App\Project;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use DateTime;
 
 class PagesController extends Controller
 {
@@ -27,10 +28,28 @@ class PagesController extends Controller
 		return view('pages.about');
 	}
 
-	public function search()
+	public function search(Request $request)
 	{
 		$records = $this->getAllAsArray();
+		$records['types'] = array('entrada' => 'Entrada', 'saida' => 'Saída', 'a_receber' => 'A Receber', 'a_pagar' => 'A Pagar');
 
+// \DB::enableQueryLog();
+		$rec = Record::query();
+		$rec->selectRaw('accounts.title as tit, records.type as typ, sum(records.value) as val');
+		$rec->leftJoin('accounts', 'records.account_id', '=', 'accounts.id');
+		list( $rec, $records ) = $this->queryExpiryDate($request, $rec, $records);
+		$request->type ? $rec->whereIn('typ', $request->type) : null;
+		$request->categories_id ? $rec->whereIn('records.category_id', $request->categories_id) : null;
+		$request->people_id ? $rec->whereIn('records.person_id', $request->people_id) : null;
+		$request->project_id ? $rec->whereIn('records.project_id', $request->project_id) : null;
+		$rec->groupBy('accounts.title')->groupBy('records.type');
+		$sort = array( "accounts.title" => "desc", "records.type" => "desc" );
+		foreach ($sort as $key => $value) {
+    		$rec->orderBy($key, $value);
+		}
+		$records['all'] = $this->fillTheBlanks($rec->get(), $records, $request->type);
+		$records['request'] = $request->all();
+// print_pre(\DB::getQueryLog());
 		return view('pages.search', compact('records'));
 	}
 	public function getAllAccountsAsArray()
@@ -86,5 +105,37 @@ class PagesController extends Controller
     	$records['projects'] = $this->getAllProjectsAsArray();
 
     	return $records;
+	}
+
+	public function fillTheBlanks($rec, $records, $req_types = null)
+	{
+		$keys = $req_types ? $req_types : array_keys($records["types"]);
+		$types = array_fill_keys( $keys, 0 );
+		$fill_arr = array();
+		foreach( $types as $key_type => $value_type ){
+			foreach ($records["accounts"] as $account) {
+				$fill_arr[$key_type][$account] = 0;
+			}
+		}
+
+		foreach ($rec as $r) {
+			$fill_arr[$r->typ][$r->tit] = $r->val;
+		}
+
+		return $fill_arr;
+	}
+
+	public function queryExpiryDate(Request $request, $rec, $records)
+	{
+		if( $request->date_venc ){
+			preg_match('/(?P<date_venc_start>\d{2}\/\d{2}\/\d{4}) - (?P<date_venc_end>\d{2}\/\d{2}\/\d{4})/', $request->date_venc, $matches);
+			$start = DateTime::createFromFormat( "d/m/Y", $matches['date_venc_start'] );
+			$end = DateTime::createFromFormat( "d/m/Y", $matches['date_venc_end'] );
+			$rec->whereBetween('records.payment_date', array($start->format("Y-m-d"), $end->format("Y-m-d")));
+			$records['request']['date_venc'] = $matches['date_venc_start'] . " - " . $matches['date_venc_end'];
+			$records['request']['exp_date_start'] = $matches['date_venc_start'];
+			$records['request']['exp_date_end'] = $matches['date_venc_end'];
+		}
+		return array( $rec, $records );
 	}
 }

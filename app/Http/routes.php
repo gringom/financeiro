@@ -4,6 +4,7 @@ Route::auth();
 
 Route::get('/', 'PagesController@home');
 Route::get('/sobre', 'PagesController@about');
+Route::get('/fluxo', 'PagesController@flow');
 Route::get('/busca', 'PagesController@search');
 
 // cadastro no banco de dados

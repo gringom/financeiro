@@ -47,11 +47,21 @@ class PagesController extends Controller
 		foreach ($sort as $key => $value) {
     		$rec->orderBy($key, $value);
 		}
-		$records['all'] = $this->fillTheBlanks($rec->get(), $records, $request->type);
+		$records['all'] = $this->searchFillTheBlanks($rec->get(), $records, $request->type);
 		$records['request'] = $request->all();
 // print_pre(\DB::getQueryLog());
 		return view('pages.search', compact('records'));
 	}
+
+	public function flow(Request $request)
+	{
+		$records['categories'] = $this->getAllCategoriesAsArray();
+		$records['payment_date'] = $request->payment_date ? $request->payment_date : date("d/m/Y", mktime(0,0,0, date("m")-3, 01, date("Y"))) . " - " . date("d/m/Y", mktime(0,0,0, date("m")+7, 0, date("Y")));
+// print_pre( $records['payment_date'] );
+		$records['all'] = $this->flowFillTheBlanks($request, $records);
+		return view('pages.flow', compact('records'));	
+	}
+
 	public function getAllAccountsAsArray()
 	{
 		$accounts_info = Account::all() ;
@@ -107,7 +117,7 @@ class PagesController extends Controller
     	return $records;
 	}
 
-	public function fillTheBlanks($rec, $records, $req_types = null)
+	public function searchFillTheBlanks($rec, $records, $req_types = null)
 	{
 		$keys = $req_types ? $req_types : array_keys($records["types"]);
 		$types = array_fill_keys( $keys, 0 );
@@ -120,6 +130,22 @@ class PagesController extends Controller
 
 		foreach ($rec as $r) {
 			$fill_arr[$r->type][$r->tit] = $r->val;
+		}
+
+		return $fill_arr;
+	}
+
+	public function flowFillTheBlanks(Request $request, $records)
+	{
+		if( preg_match('/(?P<payment_date_start>\d{2}\/\d{2}\/\d{4}) - (?P<payment_date_end>\d{2}\/\d{2}\/\d{4})/', $records['payment_date'], $matches) ){
+// print_pre( $matches );
+		}
+
+		$fill_arr = array();
+		foreach( $records["categories"] as $main_category => $sub_categories ){
+			foreach ($sub_categories as $id => $sub_category) {
+				
+			}
 		}
 
 		return $fill_arr;

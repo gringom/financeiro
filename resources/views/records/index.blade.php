@@ -111,7 +111,7 @@ Banco de Dados
 						@endif						
 						<td style="white-space:nowrap;">
 							<a class="btn btn-info pull-right" href="/bd/{{ $record->id }}/duplicar" onclick="return confirm('Confirma a dupicação desse registro do Banco de Dados?');">Duplicar</a>
-							<a class="btn btn-default pull-right margin-right-10" href="/bd/{{ $record->id }}">Editar</a>
+							<a class="btn btn-default pull-right margin-right-10" target="_blank" href="/bd/{{ $record->id }}">Editar</a>
 						</td>
 					</tr>
 				@endforeach

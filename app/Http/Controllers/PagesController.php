@@ -66,7 +66,7 @@ class PagesController extends Controller
 		}
 		else{
 			$rec->selectRaw("category_id, DATE_FORMAT(payment_date, '%Y-%m') as pay_date, sum(value) as sum_value");
-			$rec->groupBy("DATE_FORMAT(payment_date, '%Y-%m')")->groupBy("category_id");
+			$rec->groupBy("pay_date")->groupBy("category_id");
 		}
 		list( $rec, $records ) = $this->queryExpiryDate($request, $rec, $records);
 		$rec = $this->querySortBy($rec, array( "category_id" => "asc", "payment_date" => "asc" ));

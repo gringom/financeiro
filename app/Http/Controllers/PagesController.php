@@ -71,6 +71,7 @@ class PagesController extends Controller
 		list( $rec, $records ) = $this->queryExpiryDate($request, $rec, $records);
 		$rec = $this->querySortBy($rec, array( "category_id" => "asc", "payment_date" => "asc" ));
 		list( $records['all'], $records['textual_dates'], $records['dates']) = $this->flowFillTheBlanks($rec->get(), $records, $request);
+		$records['tooltip'] = $this->getAllCategoriesAsArray(true);
 
 		return view('pages.flow', compact('records'));	
 	}
@@ -86,12 +87,15 @@ class PagesController extends Controller
     	return $accounts;
 	}
 
-	public function getAllCategoriesAsArray()
+	public function getAllCategoriesAsArray( $complete = false )
 	{
 		$categories_info = Category::all() ;
     	$categories = array();
     	foreach( $categories_info as $category ){
-    		$categories[$category->type][$category->id] = $category->title;
+    		if( $complete === false )
+	    		$categories[$category->type][$category->id] = $category->title;
+	    	else
+	    		$categories[$category->type][$category->id] = array( "title" => $category->title, "description" => $category->description );
     	}
 
     	return $categories;

@@ -21,12 +21,6 @@ Fluxo de Caixa
 
         <h1>Fluxo de Caixa</h1>
 <?php
-// print_pre( $records['categories'] );
-// print_pre( $records['dates'] );
-// print_pre( $records['types'] );
-// print_pre( $records['request'] );
-// print_pre( $records['dates'] );
-// print_pre( $records['all'] );
 		$sub_total = $results = $totals = array_fill_keys($records['dates'], 0);
 		$col = count($records['dates']) + 2;
 		$total_result = $last_month_result = 0;
@@ -143,6 +137,21 @@ Fluxo de Caixa
 					</tr>
 				</tfoot>
 			</table>
+		</div>
+
+		<div class="panel panel-default">
+		  <div class="panel-heading text-uppercase"><h3>Entendendo o Fluxo</h3></div>
+		  <div class="panel-body">
+		    <p>Na coluna da esquerda encontram-se todas as categorias criadas para as entradas e saídas dentro do Sistema Financeiro.</p>
+		    @foreach( $records['tooltip'] as $main_cat => $tips )
+		    	<h4>Categorias de {!! $records['types'][$main_cat] !!}</h4>
+		    	<dl class="dl-horizontal">
+		    	@foreach( $tips as $key => $tip )
+		    		<dt>{!! $tip['title'] !!}</dt><dd>{!! $tip['description'] !!}</dd>
+				@endforeach
+				</dl>
+		    @endforeach
+		  </div>
 		</div>
     </div>
 </div>

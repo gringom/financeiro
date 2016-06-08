@@ -42,8 +42,8 @@ Fluxo de Caixa
 						<td class="text-uppercase"><strong>Totais</strong></td>
 					</tr>
 				</thead>
-				<tr>
 					@foreach( $records['all']['entrada'] as $cat_id => $info )
+				<tr>
 					<?php $line_sum = 0; ?>
 					<td class="text-uppercase"><strong>{!! $records['categories']['entrada'][$cat_id] !!}</strong></td>
 					@foreach( $info as $key => $value )
@@ -55,8 +55,8 @@ Fluxo de Caixa
 					<td>R$ {!! br_num_format($value, true) !!}</td>
 					@endforeach
 					<td><strong>R$ {!! br_num_format($line_sum, true) !!}</strong></td>
-					@endforeach
 				</tr>
+					@endforeach
 				<?php
 					$line_sum = 0;
 				?>
@@ -81,8 +81,8 @@ Fluxo de Caixa
 				<tr>
 					<td colspan="<?=$col;?>"></td>
 				</tr>
-				<tr>
 					@foreach( $records['all']['saida'] as $cat_id => $info )
+				<tr>
 					<?php $line_sum = 0; ?>
 					<td class="text-uppercase"><strong>{!! $records['categories']['saida'][$cat_id] !!}</strong></td>
 					@foreach( $info as $key => $value )
@@ -97,8 +97,8 @@ Fluxo de Caixa
 					$total_result -= $line_sum;
 					?>
 					<td><strong>R$ {!! br_num_format($line_sum, true) !!}</strong></td>
-					@endforeach
 				</tr>
+					@endforeach
 				<?php
 					$line_sum = 0;
 				?>

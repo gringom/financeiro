@@ -140,7 +140,7 @@ Fluxo de Caixa
 		</div>
 
 		<div class="panel panel-default">
-		  <div class="panel-heading text-uppercase"><h3>Entendendo o Fluxo</h3></div>
+		  <div class="panel-heading text-uppercase"><h3>Legenda</h3></div>
 		  <div class="panel-body">
 		    <p>Na coluna da esquerda encontram-se todas as categorias criadas para as entradas e saídas dentro do Sistema Financeiro.</p>
 		    @foreach( $records['tooltip'] as $main_cat => $tips )

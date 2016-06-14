@@ -55,3 +55,9 @@ Route::get('/contas', 'AccountsController@index');
 Route::get('/contas/{account}', 'AccountsController@show');
 Route::patch('/contas/{account}', 'AccountsController@update');
 Route::get('/contas/{account}/delete', 'AccountsController@destroy');
+
+// usuários
+Route::get('/usuarios', 'UsersController@index');
+Route::get('/usuarios/{user}', 'UsersController@show');
+Route::patch('/usuarios/{user}', 'UsersController@update');
+Route::get('/usuarios/{user}/delete', 'UsersController@removeAccess');

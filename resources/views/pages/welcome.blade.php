@@ -29,6 +29,13 @@ Página Principal
         <div class="content">
 	        <div class="title">Financeiro.</div>
 	        <div class="sub-title">Tuva Editora</div>
+            <?php
+            if( !Auth::user()->can('view-reports') ){
+            ?>
+            <p style="margin-top: 25px">Você não tem nenhum acesso concedido.</p><p>Entre em contato com o administrador pedindo acesso.</p>
+            <?php
+            }
+            ?>
 		</div>
     </div>
 </div>

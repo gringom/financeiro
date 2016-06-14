@@ -76,18 +76,25 @@
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
+                    @permission('view-reports')
                     <li><a href="{{ url('/fluxo') }}"><i class="fa fa-btn fa-usd"></i>Fluxo de Caixa</a></li>
                     <li><a href="{{ url('/busca') }}"><i class="fa fa-btn fa-filter"></i>Painel Geral</a></li>
                     <li><a href="{{ url('/bd') }}"><i class="fa fa-btn fa-list"></i>Banco de Dados</a></li>
+                    @endpermission
+                    @permission('edit-records')
                     <li class="dropdown">
-                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-btn fa-cog"></i>Cadastros <span class="caret"></span></a>
-                      <ul class="dropdown-menu">
-                       <li><a href="{{ url('/categorias') }}"><i class="fa fa-btn fa-plus"></i>Categorias</a></li>
-                       <li><a href="{{ url('/contas') }}"><i class="fa fa-btn fa-plus"></i>Contas</a></li>
-                       <li><a href="{{ url('/clientes_fornecedores') }}"><i class="fa fa-btn fa-plus"></i>Clientes/Fornecedores</a></li>
-                       <li><a href="{{ url('/projetos') }}"><i class="fa fa-btn fa-plus"></i>Projetos</a></li>
-                      </ul>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-btn fa-cog"></i>Cadastros <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ url('/clientes_fornecedores') }}"><i class="fa fa-btn fa-plus"></i>Clientes/Fornecedores</a></li>
+                            <li><a href="{{ url('/projetos') }}"><i class="fa fa-btn fa-plus"></i>Projetos</a></li>
+                            @role('admin')
+                            <li><a href="{{ url('/categorias') }}"><i class="fa fa-btn fa-plus"></i>Categorias</a></li>
+                            <li><a href="{{ url('/contas') }}"><i class="fa fa-btn fa-plus"></i>Contas</a></li>
+                            <li><a href="{{ url('/usuarios') }}"><i class="fa fa-btn fa-user"></i>Usuários</a></li>
+                            @endrole
+                        </ul>
                     </li>
+                    @endpermission
                 </ul>
 
                 <!-- Right Side Of Navbar -->
@@ -104,8 +111,9 @@
 
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
-                                <li><a href="{{ url('/users') }}"><i class="fa fa-btn fa-user"></i>Usuários</a></li>
+                                @permission('view-reports')
                                 <li><a href="{{ url('/sobre') }}"><i class="fa fa-btn fa-th"></i>Sobre</a></li>
+                                @endpermission
                             </ul>
                         </li>
                     @endif

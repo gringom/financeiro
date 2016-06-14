@@ -60,14 +60,10 @@ class PagesController extends Controller
 		$records['date'] = $request->date_venc ? $request->date_venc : date("d/m/Y", mktime(0,0,0, date("m")-3, 01, date("Y"))) . " - " . date("d/m/Y", mktime(0,0,0, date("m")+7, 0, date("Y")));
 
 		$rec = Record::query();
-		if ( getenv('APP_ENV') == "local"){
-			$rec->selectRaw("category_id, strftime('%Y-%m',payment_date) as pay_date, sum(value) as sum_value");
-			$rec->groupBy("pay_date")->groupBy("category_id");
-		}
-		else{
-			$rec->selectRaw("category_id, DATE_FORMAT(payment_date, '%Y-%m') as pay_date, sum(value) as sum_value");
-			$rec->groupBy("pay_date")->groupBy("category_id");
-		}
+
+		$rec->selectRaw("category_id, DATE_FORMAT(payment_date, '%Y-%m') as pay_date, sum(value) as sum_value");
+		$rec->groupBy("pay_date")->groupBy("category_id");
+
 		list( $rec, $records ) = $this->queryExpiryDate($request, $rec, $records);
 		$rec = $this->querySortBy($rec, array( "category_id" => "asc", "payment_date" => "asc" ));
 		list( $records['all'], $records['textual_dates'], $records['dates']) = $this->flowFillTheBlanks($rec->get(), $records, $request);

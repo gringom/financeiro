@@ -60,6 +60,7 @@ class RecordsController extends Controller
 		$records['this'] = $record ;
 		$records['payment_date'] = DateTime::createFromFormat('Y-m-d', $record->payment_date);
 		$records['paid_date'] = DateTime::createFromFormat('Y-m-d', $record->paid_date);
+		$records['history'] = $record->revisionHistory ;
 
 		return view('records.edit', compact('records'));
 	}

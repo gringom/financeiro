@@ -49,6 +49,7 @@
 
         .container{ width: 100% !important; }
 
+        #revision-history { margin: 25px; max-width: 600px; border: 1px solid #000000; padding: 15px; }
     </style>
 
     @yield('head')

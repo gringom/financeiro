@@ -5,10 +5,6 @@ $user = Auth::user();
 
 Route::get('/', 'PagesController@home');
 
-// if( $user->can('view-reports') ){
-// if( $user->can('edit-records') ){
-// if( $user->can('edit-users') ){
-
 Route::group(['middleware' => ['permission:view-reports']], function() {
 	Route::get('/sobre', 'PagesController@about');
 	Route::get('/fluxo', 'PagesController@flow');

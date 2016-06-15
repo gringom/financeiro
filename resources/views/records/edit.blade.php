@@ -89,6 +89,17 @@ Registro: {{ $records['types'][$type] }} / {{ $records['people'][$person_id] }}
 			</div>
 		{!! Form::close() !!}
 
+		@if (count($records['history']))
+		<div id="revision-history">
+			<h2>Revisões</h2>
+			<dl>
+				@foreach($records['history'] as $history)
+				<dt><hr><strong>{{ $history->userResponsible()->name }}</strong></dt>
+				<dd>- Alterou o campo <b>{{ $history->fieldName() }}</b>. Conteúdo anterior "<em>{{ $history->oldValue() }}</em>", conteúdo atual: "<strong>{{ $history->newValue() }}</strong>"</dd>
+				@endforeach
+			</dl>
+		</div>
+		@endif
 	</div>
 </div>
 @stop

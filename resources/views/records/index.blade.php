@@ -16,6 +16,7 @@ $end_date = isset( $records['form_request']['exp_date_end'] ) ? $records['form_r
 $paid_date = isset($records['form_request']['paid_date']) ? $records['form_request']['paid_date'] : null ;
 
 $sum_entrada = $sum_saida = $sum_a_pagar = $sum_a_receber = 0;	
+
 ?>
 
 @extends('layouts.app')

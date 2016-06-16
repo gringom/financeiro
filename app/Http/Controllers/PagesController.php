@@ -41,9 +41,9 @@ class PagesController extends Controller
 		$rec->leftJoin('accounts', 'records.account_id', '=', 'accounts.id');
 		list( $rec, $records ) = $this->queryExpiryDate($request, $rec, $records);
 		$request->type ? $rec->whereIn('type', $request->type) : null;
-		$request->categories_id ? $rec->whereIn('records.category_id', $request->categories_id) : null;
-		$request->people_id ? $rec->whereIn('records.person_id', $request->people_id) : null;
-		$request->project_id ? $rec->whereIn('records.project_id', $request->project_id) : null;
+		$request->category ? $rec->whereIn('records.category_id', $request->category) : null;
+		$request->person ? $rec->whereIn('records.person_id', $request->person) : null;
+		$request->project ? $rec->whereIn('records.project_id', $request->project) : null;
 		$rec->groupBy('accounts.title')->groupBy('records.type');
 		$rec = $this->querySortBy($rec, array( "accounts.title" => "desc", "records.type" => "desc" ));
 		
@@ -57,7 +57,7 @@ class PagesController extends Controller
 	{
 		$records['categories'] = $this->getAllCategoriesAsArray();
 		$records['types'] = getTypes( true );
-		$records['date'] = $request->date_venc ? $request->date_venc : date("d/m/Y", mktime(0,0,0, date("m")-3, 01, date("Y"))) . " - " . date("d/m/Y", mktime(0,0,0, date("m")+7, 0, date("Y")));
+		$records['date'] = $request->data_venc ? $request->data_venc : date("d/m/Y", mktime(0,0,0, date("m")-3, 01, date("Y"))) . " - " . date("d/m/Y", mktime(0,0,0, date("m")+7, 0, date("Y")));
 
 		$rec = Record::query();
 
@@ -133,8 +133,8 @@ class PagesController extends Controller
 	public function queryExpiryDate(Request $request, $rec, $records)
 	{
 		$date = null;
-		if( $request->date_venc ){
-			$date = $request->date_venc;
+		if( $request->data_venc ){
+			$date = $request->data_venc;
 		}
 		elseif ( isset($records['date']) ) {
 			$date = $records['date'];
@@ -145,7 +145,7 @@ class PagesController extends Controller
 			$start = DateTime::createFromFormat( "d/m/Y", $matches['date_venc_start'] );
 			$end = DateTime::createFromFormat( "d/m/Y", $matches['date_venc_end'] );
 			$rec->whereBetween('records.payment_date', array($start->format("Y-m-d"), $end->format("Y-m-d")));
-			$records['request']['date_venc'] = $matches['date_venc_start'] . " - " . $matches['date_venc_end'];
+			$records['request']['data_venc'] = $matches['date_venc_start'] . " - " . $matches['date_venc_end'];
 			$records['request']['exp_date_start'] = $matches['date_venc_start'];
 			$records['request']['exp_date_end'] = $matches['date_venc_end'];
 		}

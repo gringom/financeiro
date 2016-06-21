@@ -46,7 +46,7 @@ class PagesController extends Controller
 		$request->project ? $rec->whereIn('records.project_id', $request->project) : null;
 		$rec->groupBy('accounts.title')->groupBy('records.type');
 		$rec = $this->querySortBy($rec, array( "accounts.title" => "desc", "records.type" => "desc" ));
-		
+// print_pre( $rec->toSql() );
 		$records['all'] = $this->searchFillTheBlanks($rec->get(), $records, $request->type);
 		$records['request'] = $request->all();
 

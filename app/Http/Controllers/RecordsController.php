@@ -11,6 +11,7 @@ use App\Person;
 use App\Project;
 use DateTime;
 use Illuminate\Http\Request;
+use Session;
 
 class RecordsController extends Controller
 {
@@ -23,18 +24,20 @@ class RecordsController extends Controller
     {
     	$records = $this->getAllAsArray();
     	$records['form_request'] = $request->all();
-    	if( $request->exists('s') ) {
+    	$this->saveToSession( $request );
+
+    	if( session()->has('search.s') ) {
     		$rec = Record::query();
 
-			list( $rec, $records ) = $this->queryValue($request, $rec, $records);
-			list( $rec, $records ) = $this->queryExpiryDate($request, $rec, $records);
-			list( $rec, $records ) = $this->queryPaidDate($request, $rec, $records);
+			list( $rec, $records ) = $this->queryValue($rec, $records);
+			list( $rec, $records ) = $this->queryExpiryDate($rec, $records);
+			list( $rec, $records ) = $this->queryPaidDate($rec, $records);
 
-			$request->type ? $rec->whereIn('type', $request->type) : null;
-    		$request->account ? $rec->whereIn('account_id', $request->account) : null;
-    		$request->category ? $rec->whereIn('category_id', $request->category) : null;
-    		$request->person ? $rec->whereIn('person_id', $request->person) : null;
-    		$request->project ? $rec->whereIn('project_id', $request->project) : null;
+			session('search.type') ? $rec->whereIn('type', session('search.type')) : null;
+    		session('search.account') ? $rec->whereIn('account_id', session('search.account')) : null;
+    		session('search.category') ? $rec->whereIn('category_id', session('search.category')) : null;
+    		session('search.person') ? $rec->whereIn('person_id', session('search.person')) : null;
+    		session('search.project') ? $rec->whereIn('project_id', session('search.project')) : null;
     		$records['all'] = $rec->orderBy('created_at', 'desc')->get();
     	}
     	else {
@@ -89,6 +92,37 @@ class RecordsController extends Controller
 		flash('Registro criado.', 'success');
 
 		return redirect('/bd');
+	}
+
+	public function clearSearchSession()
+	{
+		Session::forget( 'search' );
+		flash('Busca limpa.', 'success');
+
+		return redirect('/bd');
+	}
+
+	public function saveToSession(Request $request)
+	{
+		if( $request->exists('s') ){
+			Session::forget( 'search' );
+		}
+
+		foreach ($request->all() as $key => $value) {
+			if ( is_array( $value ) ){
+				// if array exists in session forget it first
+				if ( session( 'search.' . $key ) ){
+					Session::forget( 'search.' . $key );
+				}
+
+				foreach ($value as $arr_key => $arr_value) {
+					Session::push('search.' . $key, $arr_value);
+				}
+			}
+			else {
+				Session::put('search.' . $key, $value);
+			}
+		}
 	}
 
 	public function duplicate(Record $record)
@@ -211,10 +245,10 @@ class RecordsController extends Controller
 		return $records;
 	}
 
-	public function queryExpiryDate(Request $request, $rec, $records)
+	public function queryExpiryDate($rec, $records)
 	{
-		if( $request->data_venc ){
-			preg_match('/(?P<date_venc_start>\d{2}\/\d{2}\/\d{4}) - (?P<date_venc_end>\d{2}\/\d{2}\/\d{4})/', $request->data_venc, $matches);
+		if( session('search.data_venc') ){
+			preg_match('/(?P<date_venc_start>\d{2}\/\d{2}\/\d{4}) - (?P<date_venc_end>\d{2}\/\d{2}\/\d{4})/', session('search.data_venc'), $matches);
 			$start = DateTime::createFromFormat( "d/m/Y", $matches['date_venc_start'] );
 			$end = DateTime::createFromFormat( "d/m/Y", $matches['date_venc_end'] );
 			$rec->whereBetween('payment_date', array($start->format("Y-m-d"), $end->format("Y-m-d")));
@@ -225,10 +259,10 @@ class RecordsController extends Controller
 		return array( $rec, $records );
 	}
 
-	public function queryPaidDate(Request $request, $rec, $records)
+	public function queryPaidDate($rec, $records)
 	{
-		if( $request->data_pag ){
-			preg_match('/(?P<date_paid_start>\d{2}\/\d{2}\/\d{4}) - (?P<date_paid_end>\d{2}\/\d{2}\/\d{4})/', $request->data_pag, $matches);
+		if( session('search.data_pag') ){
+			preg_match('/(?P<date_paid_start>\d{2}\/\d{2}\/\d{4}) - (?P<date_paid_end>\d{2}\/\d{2}\/\d{4})/', session('search.data_pag'), $matches);
 			$start = DateTime::createFromFormat( "d/m/Y", $matches['date_paid_start'] );
 			$end = DateTime::createFromFormat( "d/m/Y", $matches['date_paid_end'] );
 			$rec->whereBetween('paid_date', array($start->format("Y-m-d"), $end->format("Y-m-d")));
@@ -239,9 +273,9 @@ class RecordsController extends Controller
 		return array( $rec, $records );
 	}
 
-	public function queryValue(Request $request, $rec, $records)
+	public function queryValue($rec, $records)
 	{
-		if( $request->value && preg_match('/((?:\d{1,3}[,\.]?)+\d*)\,((?:\d{1,3}[,\.]?)+\d*)/', $request->value, $matches) ){
+		if( session('search.value') && preg_match('/((?:\d{1,3}[,\.]?)+\d*)\,((?:\d{1,3}[,\.]?)+\d*)/', session('search.value'), $matches) ){
 			$rec->whereBetween('value', array($matches[1], $matches[2]));
 			$records['form_request']['min_selected_value'] = $matches[1];
 			$records['form_request']['max_selected_value'] = $matches[2];

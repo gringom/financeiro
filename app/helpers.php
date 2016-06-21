@@ -13,6 +13,13 @@ function print_pre( $arr )
 	print "</pre>";
 }
 
+function var_dump_pre( $value )
+{
+	print "<pre>";
+	var_dump( $value );
+	print "</pre>";
+}
+
 function getTypes( $main = false ){
 	if ( $main == true ){
 		return array('entrada' => 'Entrada', 'saida' => 'Saída');

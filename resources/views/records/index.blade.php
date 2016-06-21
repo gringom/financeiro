@@ -1,19 +1,21 @@
 <?php
 
-$type = isset( $records['form_request']['type'] ) ? $records['form_request']['type'] : old('type');
-$account = isset( $records['form_request']['account'] ) ? $records['form_request']['account'] : old('account');
-$category = isset( $records['form_request']['category'] ) ? $records['form_request']['category'] : old('category');
-$person = isset( $records['form_request']['person'] ) ? $records['form_request']['person'] : old('person');
-$project = isset( $records['form_request']['project'] ) ? $records['form_request']['project'] : old('project');
-$value = isset( $records['form_request']['value'] ) ? $records['form_request']['value'] : old('value');
+$type = isset( $records['form_request']['type'] ) ? $records['form_request']['type'] : session('search.type');
+$account = isset( $records['form_request']['account'] ) ? $records['form_request']['account'] : session('search.account');
+$category = isset( $records['form_request']['category'] ) ? $records['form_request']['category'] : session('search.category');
+$person = isset( $records['form_request']['person'] ) ? $records['form_request']['person'] : session('search.person');
+$project = isset( $records['form_request']['project'] ) ? $records['form_request']['project'] : session('search.project');
+$value = isset( $records['form_request']['value'] ) ? $records['form_request']['value'] : session('search.value');
+
 $min_value_limit = isset($records['form_request']['min_value_limit']) ? $records['form_request']['min_value_limit'] : 0;
 $max_value_limit = isset($records['form_request']['max_value_limit']) ? $records['form_request']['max_value_limit'] : 100000;
 $min_selected_value = isset($records['form_request']['min_selected_value']) ? $records['form_request']['min_selected_value'] : $min_value_limit;
 $max_selected_value = isset($records['form_request']['max_selected_value']) ? $records['form_request']['max_selected_value'] : $max_value_limit;
-$exp_date = isset($records['form_request']['exp_date']) ? $records['form_request']['exp_date'] : null ;
+
+$exp_date = isset($records['form_request']['exp_date']) ? $records['form_request']['exp_date'] : session('search.exp_date');
 $start_date = isset( $records['form_request']['exp_date_start'] ) ? $records['form_request']['exp_date_start'] : date('d/m/Y', mktime (0, 0, 0, date("m")-1, date("d"),  date("Y")));
 $end_date = isset( $records['form_request']['exp_date_end'] ) ? $records['form_request']['exp_date_end'] : date('d/m/Y', mktime (0, 0, 0, date("m"), date("d"),  date("Y")));
-$paid_date = isset($records['form_request']['paid_date']) ? $records['form_request']['paid_date'] : null ;
+$paid_date = isset($records['form_request']['paid_date']) ? $records['form_request']['paid_date'] : session('search.paid_date') ;
 
 $sum_entrada = $sum_saida = $sum_a_pagar = $sum_a_receber = 0;	
 
@@ -57,7 +59,7 @@ Banco de Dados
 							<th>Descrição</th>
 							<th>
 								<button type="submit" name="s" class="btn btn-primary pull-right">Pesquisar</button>
-								<a class="btn btn-default pull-right margin-right-10" href="/bd">Limpar</a>
+								<a class="btn btn-default pull-right margin-right-10" href="/bd/limpar-busca">Limpar</a>
 							</th>
 						</tr>
 					</thead>
@@ -113,7 +115,7 @@ Banco de Dados
 						<td style="white-space:nowrap;">
 							@permission('edit-records')
 							<a class="btn btn-info pull-right" href="/bd/{{ $record->id }}/duplicar" onclick="return confirm('Confirma a dupicação desse registro do Banco de Dados?');">Duplicar</a>
-							<a class="btn btn-default pull-right margin-right-10" target="_blank" href="/bd/{{ $record->id }}">Editar</a>
+							<a class="btn btn-default pull-right margin-right-10" href="/bd/{{ $record->id }}">Editar</a>
 							@endpermission
 						</td>
 					</tr>

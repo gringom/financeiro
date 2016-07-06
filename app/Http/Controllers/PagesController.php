@@ -57,7 +57,7 @@ class PagesController extends Controller
 	{
 		$records['categories'] = $this->getAllCategoriesAsArray();
 		$records['types'] = getTypes( true );
-		$records['date'] = $request->data_venc ? $request->data_venc : date("d/m/Y", mktime(0,0,0, date("m")-3, 01, date("Y"))) . " - " . date("d/m/Y", mktime(0,0,0, date("m")+7, 0, date("Y")));
+		$records['date'] = date("d/m/Y", mktime(0,0,0, 01, 01, 2016)) . " - " . date("d/m/Y", mktime(0,0,0, date("m")+7, 0, date("Y")));
 
 		$rec = Record::query();
 
@@ -66,6 +66,7 @@ class PagesController extends Controller
 
 		list( $rec, $records ) = $this->queryExpiryDate($request, $rec, $records);
 		$rec = $this->querySortBy($rec, array( "category_id" => "asc", "payment_date" => "asc" ));
+// print_pre( $rec->toSql() );
 		list( $records['all'], $records['textual_dates'], $records['dates']) = $this->flowFillTheBlanks($rec->get(), $records, $request);
 		$records['tooltip'] = $this->getAllCategoriesAsArray(true);
 

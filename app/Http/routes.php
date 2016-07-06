@@ -13,6 +13,7 @@ Route::group(['middleware' => ['permission:view-reports']], function() {
 
 Route::group(['middleware' => ['permission:edit-records']], function() {
 	// cadastro no banco de dados
+	Route::get('/bd/exportar', 'RecordsController@csvExport');
 	Route::get('/bd/limpar-busca', 'RecordsController@clearSearchSession');
 	Route::get('/bd/criar', 'RecordsController@new_record');
 	Route::post('/bd/criar', 'RecordsController@store');

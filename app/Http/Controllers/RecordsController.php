@@ -22,32 +22,7 @@ class RecordsController extends Controller
 
     public function index(Request $request)
     {
-    	$records = $this->getAllAsArray();
-    	$records['form_request'] = $request->all();
-    	$this->saveToSession( $request );
-
-    	if( session()->has('search.s') ) {
-    		$rec = Record::query();
-
-			list( $rec, $records ) = $this->queryValue($rec, $records);
-			list( $rec, $records ) = $this->queryExpiryDate($rec, $records);
-			list( $rec, $records ) = $this->queryPaidDate($rec, $records);
-
-			session('search.type') ? $rec->whereIn('type', session('search.type')) : null;
-    		session('search.account') ? $rec->whereIn('account_id', session('search.account')) : null;
-    		session('search.category') ? $rec->whereIn('category_id', session('search.category')) : null;
-    		session('search.person') ? $rec->whereIn('person_id', session('search.person')) : null;
-    		session('search.project') ? $rec->whereIn('project_id', session('search.project')) : null;
-    		$records['all'] = $rec->orderBy('created_at', 'desc')->get();
-    	}
-    	else {
-    		$rec = Record::orderBy('created_at', 'desc')->get();
-    		$records['all'] = $rec->load('account','category','person','project');
-    	}
-
-    	$records['types'] = array('entrada' => 'Entrada', 'saida' => 'Saída', 'a_receber' => 'A Receber', 'a_pagar' => 'A Pagar');
-    	$records = $this->getValueLimits($records);
-
+    	$records = $this->getAllRecords($request);
     	return view('records.index', compact('records'));
     }
 
@@ -92,6 +67,70 @@ class RecordsController extends Controller
 		flash('Registro criado.', 'success');
 
 		return redirect('/bd');
+	}
+
+	public function csvExport(Request $request)
+	{
+		$records = $this->getAllRecords($request);
+		$header = array("ID","Tipo","Conta","Categoria","Cliente-Fornecedor","Projeto","Valor","Data-Vencimento","Data-Pagamento","Desc");
+
+		$csv = \League\Csv\Writer::createFromFileObject(new \SplTempFileObject());
+		$csv->insertOne($header);
+
+		$types = getTypes();
+		foreach ($records['all'] as $record) {
+			$project = $record["project"]["title"] ? $record["project"]["title"] : "";
+			$venc_date = DateTime::createFromFormat('Y-m-d', $record["payment_date"]);
+			$paid_date = isset($record["paid_date"]) ? DateTime::createFromFormat('Y-m-d', $record["paid_date"]) : null;
+			$paid_date = isset($paid_date) ? $paid_date->format('d/m/Y') : "";
+
+			$item = array(
+				$record["id"],
+				$types[$record["type"]],
+				$record["account"]["title"],
+				$record["category"]["title"],
+				$record["person"]["title"],
+				$project,$record["value"],
+				$venc_date->format('d/m/Y'),
+				$paid_date,$record["description"]
+			);
+
+    		$csv->insertOne($item);
+		}
+
+		$filename = "extrato-" . date("Y-m-d_His") . ".csv";
+		$csv->output($filename);
+	}
+
+	public function getAllRecords(Request $request)
+	{
+    	$records = $this->getAllAsArray();
+    	$records['form_request'] = $request->all();
+    	$this->saveToSession( $request );
+
+    	if( session()->has('search.s') ) {
+    		$rec = Record::query();
+
+			list( $rec, $records ) = $this->queryValue($rec, $records);
+			list( $rec, $records ) = $this->queryExpiryDate($rec, $records);
+			list( $rec, $records ) = $this->queryPaidDate($rec, $records);
+
+			session('search.type') ? $rec->whereIn('type', session('search.type')) : null;
+    		session('search.account') ? $rec->whereIn('account_id', session('search.account')) : null;
+    		session('search.category') ? $rec->whereIn('category_id', session('search.category')) : null;
+    		session('search.person') ? $rec->whereIn('person_id', session('search.person')) : null;
+    		session('search.project') ? $rec->whereIn('project_id', session('search.project')) : null;
+    		$records['all'] = $rec->orderBy('created_at', 'desc')->get();
+    	}
+    	else {
+    		$rec = Record::orderBy('created_at', 'desc')->get();
+    		$records['all'] = $rec->load('account','category','person','project');
+    	}
+
+    	$records['types'] = array('entrada' => 'Entrada', 'saida' => 'Saída', 'a_receber' => 'A Receber', 'a_pagar' => 'A Pagar');
+    	$records = $this->getValueLimits($records);
+
+    	return $records;
 	}
 
 	public function clearSearchSession()

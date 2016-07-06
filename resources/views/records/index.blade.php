@@ -42,6 +42,7 @@ Banco de Dados
 		<h1>Banco de Dados</h1>
 
 		<a href="/bd/criar" class="btn btn-primary margin-bottom-20">Novo</a>
+		<a href="/bd/exportar" class="btn btn-warning margin-bottom-20">Exportar</a>
 		{!! Form::open(array('method' => 'GET', 'url' => '/bd/')) !!}
 		<div class="table-responsive">
 			<table class="table table-striped table-hover">
